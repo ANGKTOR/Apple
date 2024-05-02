@@ -1,24 +1,51 @@
-This is free and unencumbered software released into the public domain.
+import pygame
+import random
+import sys
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+# تهيئة Pygame
+pygame.init()
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+# الألوان
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+# حجم الشاشة
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("تفاحة")
 
-For more information, please refer to <https://unlicense.org>
+# الخطوط
+font = pygame.font.Font(None, 48)
+
+# دالة لرسم النص
+def draw_text(text, font, color, surface, x, y):
+    textobj = font.render(text, 1, color)
+    textrect = textobj.get_rect()
+    textrect.center = (x, y)
+    surface.blit(textobj, textrect)
+
+# دالة لرسم التفاحة
+def draw_apple():
+    apple_pos = (random.randint(50, WIDTH-50), random.randint(50, HEIGHT-50))
+    pygame.draw.circle(screen, RED, apple_pos, 20)
+
+# الدوران الرئيسي
+running = True
+playing = False
+while running:
+    screen.fill(WHITE)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            playing = True
+
+    if not playing:
+        draw_text('انقر PLAY للعب', font, RED, screen, WIDTH // 2, HEIGHT // 2)
+    else:
+        draw_apple()
+
+    pygame.display.update()
+
+pygame.quit()
